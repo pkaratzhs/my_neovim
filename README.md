@@ -70,3 +70,26 @@ sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/sha
 ./install
 ```
 and that should be it?
+
+# General notes for code navigation
+
+## Tmux commands
+* Ctrl+SPACE for tmux command mode
+* % for split
+* C for new window
+* N for next window
+* S for show windows
+* D for detach
+* X to kill pane
+
+
+## Vim commands
+* CTRL + O jump to previous file or w/e (vim)
+* leader +K remove highlighted text
+* gcc - Comment a selection?
+* check out tpope/vim-surround  for surround commands
+* select + * for multi line search in file
+* x for xml attributes
+* g+S for split array g+J to join in one line
+* a in NvimTree for new file
+* leader + e to open tree
