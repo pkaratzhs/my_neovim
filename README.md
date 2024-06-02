@@ -12,7 +12,7 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 sudo apt-get install ripgrep
 curl -L https://gist.github.com/ivangabriele/5df77e2bf55352418704f45ce07323b8/raw/install_kitty.sh | bash /dev/stdin
 ```
-## If the above is missing using this script for kitty
+## If the above is missing use this script for kitty
 ```
 #!/bin/bash
 
