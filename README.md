@@ -93,3 +93,4 @@ and that should be it?
 * g+S for split array g+J to join in one line
 * a in NvimTree for new file
 * leader + e to open tree
+* leader + w close buffer (tab)

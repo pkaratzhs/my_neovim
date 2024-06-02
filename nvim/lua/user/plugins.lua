@@ -44,6 +44,14 @@ use({
     })
 
     vim.api.nvim_set_hl(0, 'NvimTreeIndentMarker', { fg = '#30323E' })
+
+    vim.api.nvim_set_hl(0, 'StatusLineNonText', {
+      fg = vim.api.nvim_get_hl_by_name('NonText', true).foreground,
+      bg = vim.api.nvim_get_hl_by_name('StatusLine', true).background,
+    })
+
+    vim.api.nvim_set_hl(0, 'IndentBlanklineChar', { fg = '#2F313C' })
+
     vim.cmd('set cursorline')
   end,
 })
@@ -119,7 +127,7 @@ use({
 use({
   'famiu/bufdelete.nvim',
   config = function()
-    vim.keymap.set('n', '<Leader>q', ':Bdelete<CR>')
+    vim.keymap.set('n', '<Leader>w', ':Bdelete<CR>')
   end,
 })
 
@@ -160,6 +168,184 @@ use({
   requires = 'kyazdani42/nvim-web-devicons',
   config = function()
     require('user/plugins/nvim-tree')
+  end,
+})
+
+-- A Status line.
+use({
+  'nvim-lualine/lualine.nvim',
+  requires = 'kyazdani42/nvim-web-devicons',
+  config = function()
+    require('user/plugins/lualine')
+  end,
+})
+
+-- Display buffers as tabs.
+use({
+  'akinsho/bufferline.nvim',
+  requires = 'kyazdani42/nvim-web-devicons',
+  after = 'catppuccin',
+  config = function()
+    require('user/plugins/bufferline')
+  end,
+})
+
+-- Display indentation lines.
+use({
+  'lukas-reineke/indent-blankline.nvim',
+  config = function()
+    require('user/plugins/indent-blankline')
+  end,
+})
+
+-- Add a dashboard.
+use({
+  'glepnir/dashboard-nvim',
+  config = function()
+    require('dashboard')
+  end
+})
+
+-- Git integration.
+use({
+  'lewis6991/gitsigns.nvim',
+  config = function()
+    require('gitsigns').setup({
+      current_line_blame = true,
+      current_line_blame_formatter = '<author>, <author_time:%d-%m-%Y %H:%m> - <summary>',
+    })
+    vim.keymap.set('n', ']h', ':Gitsigns next_hunk<CR>')
+    vim.keymap.set('n', '[h', ':Gitsigns prev_hunk<CR>')
+    vim.keymap.set('n', 'gs', ':Gitsigns stage_hunk<CR>')
+    vim.keymap.set('n', 'gS', ':Gitsigns undo_stage_hunk<CR>')
+    vim.keymap.set('n', 'gp', ':Gitsigns preview_hunk<CR>')
+    vim.keymap.set('n', 'gb', ':Gitsigns blame_line<CR>')
+  end,
+})
+
+-- Git commands.
+use({
+  'tpope/vim-fugitive',
+  requires = 'tpope/vim-rhubarb',
+})
+
+--- Floating terminal.
+use({
+  'voldikss/vim-floaterm',
+  config = function()
+    vim.g.floaterm_width = 0.8
+    vim.g.floaterm_height = 0.8
+    vim.keymap.set('n', '<Leader>`', ':FloatermToggle<CR>')
+    vim.keymap.set('t', '<Leader>`', '<C-\\><C-n>:FloatermToggle<CR>')
+    vim.cmd([[
+      highlight link Floaterm CursorLine
+      highlight link FloatermBorder CursorLineBg
+    ]])
+  end
+})
+-- Improved syntax highlighting
+use({
+  'nvim-treesitter/nvim-treesitter',
+  build = function()
+    require('nvim-treesitter.install').update({ with_sync = true })
+  end,
+  dependencies = {
+    { 'nvim-treesitter/playground', cmd = "TSPlaygroundToggle" },
+    {
+      'JoosepAlviste/nvim-ts-context-commentstring',
+      opts = {
+        custom_calculation = function (node, language_tree)
+          if vim.bo.filetype == 'blade' and language_tree._lang ~= 'javascript' then
+            return '{{-- %s --}}'
+          end
+        end,
+      },
+    },
+    'nvim-treesitter/nvim-treesitter-textobjects',
+  },
+  main = 'nvim-treesitter.configs',
+  opts = {
+    ensure_installed = {
+      'arduino',
+      'bash',
+      'comment',
+      'css',
+      'diff',
+      'dockerfile',
+      'git_config',
+      'git_rebase',
+      'gitattributes',
+      'gitcommit',
+      'gitignore',
+      'go',
+      'html',
+      'http',
+      'ini',
+      'javascript',
+      'json',
+      'jsonc',
+      'lua',
+      'make',
+      'markdown',
+      'passwd',
+      'php',
+      'phpdoc',
+      'python',
+      'regex',
+      'ruby',
+      'rust',
+      'sql',
+      'svelte',
+      'typescript',
+      'vim',
+      'vue',
+      'xml',
+      'yaml',
+    },
+    auto_install = true,
+    highlight = {
+      enable = true,
+    },
+    indent = {
+      enable = true,
+      disable = { "yaml" }
+    },
+    context_commentstring = {
+      enable = true,
+    },
+    rainbow = {
+      enable = true,
+    },
+    textobjects = {
+      select = {
+        enable = true,
+        lookahead = true,
+        keymaps = {
+          ['if'] = '@function.inner',
+          ['af'] = '@function.outer',
+          ['ia'] = '@parameter.inner',
+          ['aa'] = '@parameter.outer',
+        },
+      },
+    },
+  },
+  config = function (_, opts)
+    require('nvim-treesitter.configs').setup(opts)
+
+    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+    parser_config.blade = {
+      install_info = {
+        url = "https://github.com/EmranMR/tree-sitter-blade",
+        files = {"src/parser.c"},
+        branch = "main",
+      },
+      filetype = "blade"
+    }
+    vim.filetype.add({
+      pattern = {
+        ['.*%.blade%.php'] = 'blade',
+      },
+    })
   end,
 })
 -- Automatically set up your configuration after cloning packer.nvim

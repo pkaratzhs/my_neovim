@@ -38,6 +38,7 @@ vim.opt.sidescrolloff = 8
 vim.opt.clipboard = 'unnamedplus' --system clipboad
 
 vim.opt.confirm = true
+vim.opt.signcolumn = "yes:1"
 
 vim.opt.undofile = true
 
