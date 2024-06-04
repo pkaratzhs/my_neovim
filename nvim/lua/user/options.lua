@@ -10,7 +10,7 @@ vim.opt.wrap = false
 
 
 vim.opt.number = true
-vim.opt.relativenumber = true
+-- vim.opt.relativenumber = true
 
 vim.opt.wildmode = 'longest:full,full'
 
@@ -38,7 +38,7 @@ vim.opt.sidescrolloff = 8
 vim.opt.clipboard = 'unnamedplus' --system clipboad
 
 vim.opt.confirm = true
-vim.opt.signcolumn = "yes:1"
+vim.opt.signcolumn = "yes:2"
 
 vim.opt.undofile = true
 

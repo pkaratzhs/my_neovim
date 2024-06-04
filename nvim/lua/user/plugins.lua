@@ -243,6 +243,7 @@ use({
     ]])
   end
 })
+
 -- Improved syntax highlighting
 use({
   'nvim-treesitter/nvim-treesitter',
@@ -250,97 +251,72 @@ use({
     require('nvim-treesitter.install').update({ with_sync = true })
   end,
   dependencies = {
-    { 'nvim-treesitter/playground', cmd = "TSPlaygroundToggle" },
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    'nvim-treesitter/playground',
     {
       'JoosepAlviste/nvim-ts-context-commentstring',
       opts = {
-        custom_calculation = function (node, language_tree)
+        custom_calculation = function(node, language_tree)
           if vim.bo.filetype == 'blade' and language_tree._lang ~= 'javascript' then
             return '{{-- %s --}}'
           end
         end,
       },
     },
-    'nvim-treesitter/nvim-treesitter-textobjects',
   },
-  main = 'nvim-treesitter.configs',
-  opts = {
-    ensure_installed = {
-      'arduino',
-      'bash',
-      'comment',
-      'css',
-      'diff',
-      'dockerfile',
-      'git_config',
-      'git_rebase',
-      'gitattributes',
-      'gitcommit',
-      'gitignore',
-      'go',
-      'html',
-      'http',
-      'ini',
-      'javascript',
-      'json',
-      'jsonc',
-      'lua',
-      'make',
-      'markdown',
-      'passwd',
-      'php',
-      'phpdoc',
-      'python',
-      'regex',
-      'ruby',
-      'rust',
-      'sql',
-      'svelte',
-      'typescript',
-      'vim',
-      'vue',
-      'xml',
-      'yaml',
-    },
-    auto_install = true,
-    highlight = {
-      enable = true,
-    },
-    indent = {
-      enable = true,
-      disable = { "yaml" }
-    },
-    context_commentstring = {
-      enable = true,
-    },
-    rainbow = {
-      enable = true,
-    },
-    textobjects = {
-      select = {
+  config = function(_, opts)
+    require('nvim-treesitter.configs').setup {
+      ensure_installed = {
+        'arduino', 'bash', 'comment', 'css', 'diff', 'dockerfile', 'git_config',
+        'git_rebase', 'gitattributes', 'gitcommit', 'gitignore', 'go', 'html',
+        'http', 'ini', 'javascript', 'json', 'jsonc', 'lua', 'make', 'markdown',
+        'passwd', 'php', 'phpdoc', 'python', 'regex', 'ruby', 'rust', 'sql',
+        'svelte', 'typescript', 'vim', 'vue', 'xml', 'yaml',
+      },
+      auto_install = true,
+      highlight = {
         enable = true,
-        lookahead = true,
-        keymaps = {
-          ['if'] = '@function.inner',
-          ['af'] = '@function.outer',
-          ['ia'] = '@parameter.inner',
-          ['aa'] = '@parameter.outer',
+      },
+      indent = {
+        enable = true,
+        disable = { 'yaml' },
+      },
+      context_commentstring = {
+        enable = true,
+      },
+      rainbow = {
+        enable = true,
+      },
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ['if'] = '@function.inner',
+            ['af'] = '@function.outer',
+            ['ia'] = '@parameter.inner',
+            ['aa'] = '@parameter.outer',
+          },
         },
       },
-    },
-  },
-  config = function (_, opts)
-    require('nvim-treesitter.configs').setup(opts)
+      playground = {
+        enable = true,
+        disable = {},
+        updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+        persist_queries = false, -- Whether the query persists across vim sessions
+      }
+    }
 
-    local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+    local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
     parser_config.blade = {
       install_info = {
-        url = "https://github.com/EmranMR/tree-sitter-blade",
-        files = {"src/parser.c"},
-        branch = "main",
+        url = 'https://github.com/EmranMR/tree-sitter-blade',
+        files = { 'src/parser.c' },
+        branch = 'main',
       },
-      filetype = "blade"
+      filetype = 'blade'
     }
+
     vim.filetype.add({
       pattern = {
         ['.*%.blade%.php'] = 'blade',
@@ -348,10 +324,23 @@ use({
     })
   end,
 })
+
+-- Language Server Protocol.
+use({
+  'neovim/nvim-lspconfig',
+  requires = {
+    'williamboman/mason.nvim',
+    'williamboman/mason-lspconfig.nvim',
+  },
+  config = function()
+    require('user/plugins/lspconfig')
+  end,
+})
+
 -- Automatically set up your configuration after cloning packer.nvim
 -- Put this at the end after all plugins
 if packer_bootstrap then
-    require('packer').sync()
+  require('packer').sync()
 end
 
 vim.cmd([[

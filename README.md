@@ -69,6 +69,11 @@ sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/sha
 ```
 ./install
 ```
+:MasonInstall vue-language-server (volar)
+:MasonInstall pint
+:MasonInstall phpactor
+:MasonInstall tailwind stuff
+
 and that should be it?
 
 # General notes for code navigation
