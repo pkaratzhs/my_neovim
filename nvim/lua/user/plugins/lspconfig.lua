@@ -6,11 +6,43 @@ require('mason-lspconfig').setup({ automatic_installation = true })
 require('lspconfig').phpactor.setup({})
 
 -- Vue, JavaScript, TypeScript
-require('lspconfig').volar.setup({
-  -- Enable "Take Over Mode" where volar will provide all JS/TS LSP services
-  -- This drastically improves the responsiveness of diagnostic updates on change
-  filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-})
+  require('lspconfig').volar.setup({
+    on_attach = function(client, bufnr)
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+      -- if client.server_capabilities.inlayHintProvider then
+      --   vim.lsp.buf.inlay_hint(bufnr, true)
+      -- end
+    end,
+    capabilities = capabilities,
+  })
+
+  require('lspconfig').tsserver.setup({
+    init_options = {
+      plugins = {
+        {
+          name = "@vue/typescript-plugin",
+          location = "/usr/local/lib/node_modules/@vue/typescript-plugin",
+          languages = {"javascript", "typescript", "vue"},
+        },
+      },
+    },
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "javascript.jsx",
+      "typescript",
+      "typescriptreact",
+      "typescript.tsx",
+      "vue",
+    },
+  })
+-- Vue, JavaScript, TypeScript
+-- require('lspconfig').volar.setup({
+--   -- Enable "Take Over Mode" where volar will provide all JS/TS LSP services
+--   -- This drastically improves the responsiveness of diagnostic updates on change
+--   filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' ,'typescriptvue'},
+-- })
 
 -- Tailwind CSS
 require('lspconfig').tailwindcss.setup({})
