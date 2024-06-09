@@ -2,37 +2,58 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- When text is wrapped, move by terminal rows, not lines, unless a count is provided.
-vim.api.nvim_set_keymap('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true })
-vim.api.nvim_set_keymap('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true })
+-- Clear search highlighting.
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+-- Close all open buffers.
+vim.keymap.set('n', '<leader>w', ':bufdo bdelete<CR>')
+
+-- Diagnostics.
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [d]iagnostic' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [d]iagnostic' })
+
+-- Allow gf to open non-existent files.
+vim.keymap.set('', 'gf', ':edit <cfile><CR>')
 
 -- Reselect visual selection after indenting.
-vim.api.nvim_set_keymap('v', '<', '<gv', { noremap = true })
-vim.api.nvim_set_keymap('v', '>', '>gv', { noremap = true })
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('v', '>', '>gv')
 
 -- Maintain the cursor position when yanking a visual selection.
-vim.api.nvim_set_keymap('v', 'y', 'myy`y', { noremap = true })
+-- http://ddrscott.github.io/blog/2016/yank-without-jank/
+vim.keymap.set('v', 'y', 'myy`y')
+vim.keymap.set('v', 'Y', 'myY`y')
 
--- Disable annoying command line typo.
-vim.api.nvim_set_keymap('n', 'q:', ':q', { noremap = true })
+-- When text is wrapped, move by terminal rows, not lines, unless a count is provided.
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true })
 
 -- Paste replace visual selection without copying it.
-vim.api.nvim_set_keymap('v', 'p', '"_dP', { noremap = true })
+vim.keymap.set('v', 'p', '"_dP')
+
+-- Reselect pasted text
+vim.keymap.set('n', 'p', 'p`[v`]')
 
 -- Easy insertion of a trailing ; or , from insert mode.
-vim.api.nvim_set_keymap('i', ';;', '<Esc>A;', { noremap = true })
-vim.api.nvim_set_keymap('i', ',,', '<Esc>A,', { noremap = true })
+vim.keymap.set('i', ';;', '<Esc>A;<Esc>')
+vim.keymap.set('i', ',,', '<Esc>A,<Esc>')
 
--- Quickly clear search highlighting.
-vim.api.nvim_set_keymap('n', '<Leader>k', ':nohlsearch<CR>', { noremap = true })
+-- Open the current file in the default program (on Mac this should just be just `open`).
+-- vim.keymap.set('n', '<leader>x', ':!xdg-open %<cr><cr>')
 
--- Open the current file in the default program.
---vim.api.nvim_set_keymap('n', '<Leader>x', ':!xdg-open %<CR><CR>', { noremap = true })
+-- Disable annoying command line thing.
+vim.keymap.set('n', 'q:', ':q<CR>')
 
--- Move lines up and down.
-vim.api.nvim_set_keymap('i', '<A-j>', '<Esc>:move .+1<CR>==gi', { noremap = true })
-vim.api.nvim_set_keymap('i', '<A-k>', '<Esc>:move .-2<CR>==gi', { noremap = true })
-vim.api.nvim_set_keymap('n', '<A-j>', ':move .+1<CR>==', { noremap = true })
-vim.api.nvim_set_keymap('n', '<A-k>', ':move .-2<CR>==', { noremap = true })
-vim.api.nvim_set_keymap('v', '<A-j>', ":move '>+1<CR>gv=gv", { noremap = true })
-vim.api.nvim_set_keymap('v', '<A-k>', ":move '<-2<CR>gv=gv", { noremap = true })
+-- Resize with arrows.
+vim.keymap.set('n', '<C-Up>', ':resize +2<CR>')
+vim.keymap.set('n', '<C-Down>', ':resize -2<CR>')
+vim.keymap.set('n', '<C-Left>', ':vertical resize -2<CR>')
+vim.keymap.set('n', '<C-Right>', ':vertical resize +2<CR>')
+
+-- Move text up and down
+-- vim.keymap.set('i', '<A-j>', '<Esc>:move .+1<CR>==gi')
+-- vim.keymap.set('i', '<A-k>', '<Esc>:move .-2<CR>==gi')
+-- vim.keymap.set('n', '<A-j>', ':move .+1<CR>==')
+-- vim.keymap.set('n', '<A-k>', ':move .-2<CR>==')
+-- vim.keymap.set('v', '<A-j>', ":move '>+1<CR>gv=gv")
+-- vim.keymap.set('v', '<A-k>', ":move '<-2<CR>gv=gv")

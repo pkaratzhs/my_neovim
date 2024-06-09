@@ -1,17 +1,16 @@
-require('ibl').setup({
+-- Indentation lines
+
+return {
+  'lukas-reineke/indent-blankline.nvim',
+  main = 'ibl',
+  opts = {
+    scope = {
+      show_start = false,
+    },
     exclude = {
-       filetypes = {
-           'help',
-           'terminal',
-           'dashboard',
-           'packer',
-           'lspinfo',
-           'TelescopePrompt',
-           'TelescoprResults'
-       },
-       buftypes = {
-           'terminal',
-           'NvimTree'
-       }
-    }
-})
+      filetypes = {
+        'dashboard',
+      },
+    },
+  }
+}
