@@ -175,7 +175,7 @@ return {
     require('mason-null-ls').setup({ automatic_installation = true })
 
     -- Keymaps
-    vim.keymap.set('n', '<Leader>d', '<cmd>lua vim.diagnostic.open_float()<CR>')
+    vim.keymap.set('n', '<leader>d', '<cmd>lua vim.diagnostic.open_float()<CR>')
     vim.keymap.set('n', 'gd', ':Telescope lsp_definitions<CR>')
     vim.keymap.set('n', 'ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
     vim.keymap.set('n', 'gi', ':Telescope lsp_implementations<CR>')
